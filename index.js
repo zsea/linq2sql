@@ -10,7 +10,7 @@ function getTestData(expressionTree) {
     if (statement.type != "ArrowFunctionExpression") {
         throw new Error("not support ArrowFunctionExpression");
     }
-    var param = statement.params[0];
+    var param = statement.params;
     var body = statement.body;
     return {
         body: body,
@@ -18,7 +18,7 @@ function getTestData(expressionTree) {
     }
 }
 //p.x.indexOf("abc")
-var data = getTestData(p => ![1,2,3].includes(p.x));
-var lam = where(data.body, data.param, {}, {});
+var data = getTestData(p => p.x == 4);
+var lam = where(data.body, data.param, {}, [{ value: 'table', parent: { value: 'db' } }]);
 console.log(lam);
 
