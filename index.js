@@ -18,7 +18,7 @@ function getTestData(expressionTree) {
     }
 }
 //p.x.indexOf("abc")
-var data = getTestData(p => p.x == 4);
+var data = getTestData(p => "abc".includes(p.x));
 var lam = where(data.body, data.param, {}, [{ value: 'table', parent: { value: 'db' } }]);
 console.log(lam);
 

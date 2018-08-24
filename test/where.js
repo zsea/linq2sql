@@ -473,8 +473,8 @@ describe("单数据库表达式测试", () => {
             operator: '='
         })
     })
-    it("p=>p.x.indexOf(\"abc\")", () => {
-        var data = getTestData(p => p.x.indexOf("abc"));
+    it("p=>\"abc\".includes(p.x)", () => {
+        var data = getTestData(p => "abc".includes(p.x));
         var lam = where(data.body, data.param, {}, [{ value: 'table', parent: { value: 'db' } }]);
         assert.deepEqual(lam, {
             left: { type: 'field', value: '`db`.`table`.`x`' },
@@ -482,8 +482,8 @@ describe("单数据库表达式测试", () => {
             operator: 'like'
         })
     })
-    it("p=>!p.x.indexOf(\"abc\")", () => {
-        var data = getTestData(p => !p.x.indexOf("abc"));
+    it("p=>!\"abc\".includes(p.x)", () => {
+        var data = getTestData(p => !"abc".includes(p.x));
         var lam = where(data.body, data.param, {}, [{ value: 'table', parent: { value: 'db' } }]);
         assert.deepEqual(lam, {
             left: null,
@@ -782,6 +782,38 @@ describe("赋值表达式测试", () => {
             operator: 'set'
         }])
     })
+    it("p=>p.x+=3", () => {
+        var data = getTestData(p => p.x += 3);
+        var lam = where(data.body, data.param, {}, [{ value: 'tbp', parent: { value: 'db' } }, { value: 'tbq', parent: { value: 'db' } }]);
+        assert.deepEqual(lam, {
+            left: { type: 'field', value: '`db`.`tbp`.`x`' },
+            right: {
+                type: "expression",
+                value: {
+                    left: { type: 'field', value: '`db`.`tbp`.`x`' },
+                    right: { type: 'const', value: 3 },
+                    operator: "+"
+                }
+            },
+            operator: 'set'
+        })
+    })
+    it("p=>p.x-=3", () => {
+        var data = getTestData(p => p.x -= 3);
+        var lam = where(data.body, data.param, {}, [{ value: 'tbp', parent: { value: 'db' } }, { value: 'tbq', parent: { value: 'db' } }]);
+        assert.deepEqual(lam, {
+            left: { type: 'field', value: '`db`.`tbp`.`x`' },
+            right: {
+                type: "expression",
+                value: {
+                    left: { type: 'field', value: '`db`.`tbp`.`x`' },
+                    right: { type: 'const', value: 3 },
+                    operator: "-"
+                }
+            },
+            operator: 'set'
+        })
+    })
 })
 describe("取字段名测试，用于排序分组等", () => {
     it("p=>p.x", () => {
@@ -790,13 +822,13 @@ describe("取字段名测试，用于排序分组等", () => {
         assert.deepEqual(lam, { type: 'field', value: '`db`.`tbp`.`x`' })
     })
     it("p=>{p.x}", () => {
-        var data = getTestData(p => {p.x});
+        var data = getTestData(p => { p.x });
         var lam = where(data.body, data.param, {}, [{ value: 'tbp', parent: { value: 'db' } }, { value: 'tbq', parent: { value: 'db' } }]);
         assert.deepEqual(lam, { type: 'field', value: '`db`.`tbp`.`x`' })
     })
     it("p=>{p.x,p.y}", () => {
-        var data = getTestData(p => {p.x,p.y});
+        var data = getTestData(p => { p.x, p.y });
         var lam = where(data.body, data.param, {}, [{ value: 'tbp', parent: { value: 'db' } }, { value: 'tbq', parent: { value: 'db' } }]);
-        assert.deepEqual(lam, [{ type: 'field', value: '`db`.`tbp`.`x`' },{ type: 'field', value: '`db`.`tbp`.`y`' }])
+        assert.deepEqual(lam, [{ type: 'field', value: '`db`.`tbp`.`x`' }, { type: 'field', value: '`db`.`tbp`.`y`' }])
     })
 })
