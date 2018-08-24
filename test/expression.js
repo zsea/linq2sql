@@ -1,5 +1,5 @@
 const assert = require('power-assert');
-const where = require("../lib/where");
+const where = require("../lib/expression");
 //console.log(expression);
 
 /**通用数据格式生成 */
@@ -861,6 +861,26 @@ describe("赋值表达式测试", () => {
             },
             operator: 'set'
         })
+    })
+    it("单属性实体对象转换",()=>{
+        var lam=where.entity({a:1},{ value: 'table', parent: { value: 'db' } }  );
+        assert.deepEqual(lam, [{
+            left:{type:"field",value:"`db`.`table`.`a`"},
+            right:{type:"const",value:1},
+            operator:"set"
+        }])
+    })
+    it("多属性实体对象转换",()=>{
+        var lam=where.entity({a:1,b:2},{ value: 'table', parent: { value: 'db' } }  );
+        assert.deepEqual(lam, [{
+            left:{type:"field",value:"`db`.`table`.`a`"},
+            right:{type:"const",value:1},
+            operator:"set"
+        },{
+            left:{type:"field",value:"`db`.`table`.`b`"},
+            right:{type:"const",value:2},
+            operator:"set"
+        }])
     })
 })
 describe("取字段名测试，用于排序分组等", () => {

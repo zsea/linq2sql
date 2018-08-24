@@ -10,9 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "acorn": "^5.7.1"
+    
   },
   "devDependencies": {
+    "acorn": "^5.7.1",
     "power-assert": "^1.6.0"
   }
 }
