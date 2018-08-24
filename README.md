@@ -119,7 +119,7 @@ expression.entity({a:1},{ value: 'table', parent: { value: 'db' } }  )
 
 # 返回值描述
 
-返回一个数组或者一个Object对象，数组中的单个元素含义与单个Ojbect相同。
+返回一个数组或者一个Object对象，数组中的单个元素含义与单个Object相同。
 
 Object对象共分两总：
 
@@ -133,7 +133,9 @@ Object对象共分两总：
 支持的操作符列表：
 +,-,*,/,%,like,in,set,>,<,>=,<=,=,or,and,not
 
-> set操作符表示赋值语句，一般用于update的语句中
+> set操作符表示赋值语句，一般用于update的语句中。
+
+> 当为```not```操作符时，```left```值为```null```。
 
 ## 情况二
 
