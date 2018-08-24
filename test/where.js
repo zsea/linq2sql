@@ -814,6 +814,54 @@ describe("赋值表达式测试", () => {
             operator: 'set'
         })
     })
+    it("p=>p.x*=3", () => {
+        var data = getTestData(p => p.x *= 3);
+        var lam = where(data.body, data.param, {}, [{ value: 'tbp', parent: { value: 'db' } }, { value: 'tbq', parent: { value: 'db' } }]);
+        assert.deepEqual(lam, {
+            left: { type: 'field', value: '`db`.`tbp`.`x`' },
+            right: {
+                type: "expression",
+                value: {
+                    left: { type: 'field', value: '`db`.`tbp`.`x`' },
+                    right: { type: 'const', value: 3 },
+                    operator: "*"
+                }
+            },
+            operator: 'set'
+        })
+    })
+    it("p=>p.x/=3", () => {
+        var data = getTestData(p => p.x /= 3);
+        var lam = where(data.body, data.param, {}, [{ value: 'tbp', parent: { value: 'db' } }, { value: 'tbq', parent: { value: 'db' } }]);
+        assert.deepEqual(lam, {
+            left: { type: 'field', value: '`db`.`tbp`.`x`' },
+            right: {
+                type: "expression",
+                value: {
+                    left: { type: 'field', value: '`db`.`tbp`.`x`' },
+                    right: { type: 'const', value: 3 },
+                    operator: "/"
+                }
+            },
+            operator: 'set'
+        })
+    })
+    it("p=>p.x%=3", () => {
+        var data = getTestData(p => p.x %= 3);
+        var lam = where(data.body, data.param, {}, [{ value: 'tbp', parent: { value: 'db' } }, { value: 'tbq', parent: { value: 'db' } }]);
+        assert.deepEqual(lam, {
+            left: { type: 'field', value: '`db`.`tbp`.`x`' },
+            right: {
+                type: "expression",
+                value: {
+                    left: { type: 'field', value: '`db`.`tbp`.`x`' },
+                    right: { type: 'const', value: 3 },
+                    operator: "%"
+                }
+            },
+            operator: 'set'
+        })
+    })
 })
 describe("取字段名测试，用于排序分组等", () => {
     it("p=>p.x", () => {
