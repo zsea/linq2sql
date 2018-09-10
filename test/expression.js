@@ -67,6 +67,27 @@ describe("数据库信息测试", () => {
 
 describe("单数据库表达式测试", () => {
     it("p=>[1,2,3].includes(p.x)", () => {
+        var list=[1,2,3]
+        var data = getTestData(p => list.includes(p.x));
+        var lam = where(data.body, data.param, {list}, [{ value: 'table', parent: { value: 'db' } }]);
+        assert.deepEqual(lam, {
+            left: { type: 'field', value: '`db`.`table`.`x`' },
+            right: {
+                type: 'array', value: [{
+                    type: "const",
+                    value: 1
+                }, {
+                    type: "const",
+                    value: 2
+                }, {
+                    type: "const",
+                    value: 3
+                }]
+            },
+            operator: 'in'
+        })
+    })
+    it("p=>[1,2,3].includes(p.x)", () => {
         var data = getTestData(p => [1, 2, 3].includes(p.x));
         var lam = where(data.body, data.param, {}, [{ value: 'table', parent: { value: 'db' } }]);
         assert.deepEqual(lam, {
@@ -473,8 +494,8 @@ describe("单数据库表达式测试", () => {
             operator: '='
         })
     })
-    it("p=>\"abc\".includes(p.x)", () => {
-        var data = getTestData(p => "abc".includes(p.x));
+    it("p=>p.x.includes(\"abc\")", () => {
+        var data = getTestData(p => p.x.includes("abc"));
         var lam = where(data.body, data.param, {}, [{ value: 'table', parent: { value: 'db' } }]);
         assert.deepEqual(lam, {
             left: { type: 'field', value: '`db`.`table`.`x`' },
@@ -482,8 +503,8 @@ describe("单数据库表达式测试", () => {
             operator: 'like'
         })
     })
-    it("p=>!\"abc\".includes(p.x)", () => {
-        var data = getTestData(p => !"abc".includes(p.x));
+    it("p=>!p.x.includes(\"abc\")", () => {
+        var data = getTestData(p => !p.x.includes("abc"));
         var lam = where(data.body, data.param, {}, [{ value: 'table', parent: { value: 'db' } }]);
         assert.deepEqual(lam, {
             left: null,
