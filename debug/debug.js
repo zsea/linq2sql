@@ -21,6 +21,6 @@ function getTestData(expressionTree) {
     }
 }
 var list = [1, 2, 3];
-var data = getTestData(p => p.x.startsWith("a"));
-var lam = where(data.body, data.param, { list }, [{ value: 'table', parent: { value: 'db' } }]);
-console.log(JSON.stringify(lam,null,4));
+var data = getTestData(p => p.x == x);
+var lam = where(data.body, data.param, { x: 1 }, [{ value: 'table', parent: { value: 'db' } }]);
+console.log(JSON.stringify(lam, null, 4));

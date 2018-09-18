@@ -67,9 +67,9 @@ describe("数据库信息测试", () => {
 
 describe("单数据库表达式测试", () => {
     it("p=>[1,2,3].includes(p.x)", () => {
-        var list=[1,2,3]
+        var list = [1, 2, 3]
         var data = getTestData(p => list.includes(p.x));
-        var lam = where(data.body, data.param, {list}, [{ value: 'table', parent: { value: 'db' } }]);
+        var lam = where(data.body, data.param, { list }, [{ value: 'table', parent: { value: 'db' } }]);
         assert.deepEqual(lam, {
             left: { type: 'field', value: '`db`.`table`.`x`' },
             right: {
@@ -288,6 +288,15 @@ describe("单数据库表达式测试", () => {
     it("p=>p[y]==1", () => {
         var data = getTestData(p => p[y] == 1);
         var lam = where(data.body, data.param, { y: 'x' }, [{ value: 'table', parent: { value: 'db' } }]);
+        assert.deepEqual(lam, {
+            left: { type: 'field', value: '`db`.`table`.`x`' },
+            right: { type: 'const', value: 1 },
+            operator: '='
+        })
+    })
+    it("p=>p.x==x", () => {
+        var data = getTestData(p => p.x == x);
+        var lam = where(data.body, data.param, { x:1 }, [{ value: 'table', parent: { value: 'db' } }]);
         assert.deepEqual(lam, {
             left: { type: 'field', value: '`db`.`table`.`x`' },
             right: { type: 'const', value: 1 },
@@ -883,24 +892,24 @@ describe("赋值表达式测试", () => {
             operator: 'set'
         })
     })
-    it("单属性实体对象转换",()=>{
-        var lam=where.entity({a:1},{ value: 'table', parent: { value: 'db' } }  );
+    it("单属性实体对象转换", () => {
+        var lam = where.entity({ a: 1 }, { value: 'table', parent: { value: 'db' } });
         assert.deepEqual(lam, [{
-            left:{type:"field",value:"`db`.`table`.`a`"},
-            right:{type:"const",value:1},
-            operator:"set"
+            left: { type: "field", value: "`db`.`table`.`a`" },
+            right: { type: "const", value: 1 },
+            operator: "set"
         }])
     })
-    it("多属性实体对象转换",()=>{
-        var lam=where.entity({a:1,b:2},{ value: 'table', parent: { value: 'db' } }  );
+    it("多属性实体对象转换", () => {
+        var lam = where.entity({ a: 1, b: 2 }, { value: 'table', parent: { value: 'db' } });
         assert.deepEqual(lam, [{
-            left:{type:"field",value:"`db`.`table`.`a`"},
-            right:{type:"const",value:1},
-            operator:"set"
-        },{
-            left:{type:"field",value:"`db`.`table`.`b`"},
-            right:{type:"const",value:2},
-            operator:"set"
+            left: { type: "field", value: "`db`.`table`.`a`" },
+            right: { type: "const", value: 1 },
+            operator: "set"
+        }, {
+            left: { type: "field", value: "`db`.`table`.`b`" },
+            right: { type: "const", value: 2 },
+            operator: "set"
         }])
     })
 })
